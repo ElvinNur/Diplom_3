@@ -1,0 +1,6 @@
+BASE_URL = "https://stellarburgers.nomoreparties.site"
+LOGIN_PAGE_URL = f"{BASE_URL}/login"
+FORGOT_PASSWORD_PAGE_URL = f"{BASE_URL}/forgot-password"
+RESET_PASSWORD_PAGE_URL = f"{BASE_URL}/reset-password"
+PROFILE_PAGE_URL = f"{BASE_URL}/account/profile"
+ORDER_HISTORY_PAGE_URL = f"{BASE_URL}/account/order-history"
