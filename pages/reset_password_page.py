@@ -8,7 +8,6 @@ class ResetPasswordPage(BasePage):
 
     def toggle_password_visibility(self):
         """Кликаем на кнопку показать/скрыть пароль."""
-        #self.wait_and_click(self.locators.TOGGLE_BUTTON)
         self.js_click(self.locators.TOGGLE_BUTTON)
 
     def verify_password_field_active(self):

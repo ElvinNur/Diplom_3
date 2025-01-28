@@ -1,9 +1,9 @@
 import requests
-from utils.config import BASE_URL
+from utils.config import MAIN_PAGE_URL
 
 class UserCreationAPI:
     def __init__(self):
-        self.base_url = BASE_URL
+        self.base_url = MAIN_PAGE_URL
 
     def create_user(self, unique_user):
         """Создаёт пользователя через API. Возвращает JSON-ответ."""

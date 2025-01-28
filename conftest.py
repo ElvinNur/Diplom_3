@@ -1,15 +1,12 @@
 import pytest
 from utils.webdriver_factory import WebDriverFactory
 from api.user_api import UserCreationAPI
-import logging
 
-logging.basicConfig(level=logging.INFO)
 
 @pytest.fixture(params=["chrome", "firefox"])
 def driver(request):
     """Фикстура для создания WebDriver."""
     browser_type = request.param
-    logging.info(f"Запуск тестов в браузере: {browser_type}")
     driver = WebDriverFactory.get_driver(browser_type)
     yield driver
     driver.quit()
