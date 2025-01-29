@@ -9,3 +9,8 @@ class MainPageLocators:
     CART = (By.XPATH,'//span[@class="constructor-element__row"]')
     COUNTER = (By.XPATH, '//a[@href="/ingredient/61c0c5a71d1f82001bdaaa6d" and .//p[text() = "2"]]')
     ORDER_BUTTON = (By.XPATH, '//button[text() = "Оформить заказ"]')
+    SAUCES_BUTTON = (By.XPATH, '//div[contains(@class, "tab")]//span[text()="Соусы"]')
+    FILLINGS_BUTTON = (By.XPATH, '//div[contains(@class, "tab")]//span[text()="Начинки"]')
+    SECOND_INGREDIENT = (By.XPATH, '//a[contains(@class, "BurgerIngredient") and .//p[text()="Соус Spicy-X"]]')
+    THIRD_INGREDIENT = (By.XPATH, '//a[contains(@class, "BurgerIngredient") and .//p[text()="Говяжий метеорит (отбивная)"]]')
+    STELLAR_BURGERS = (By.XPATH, '//a[@href="/"]')

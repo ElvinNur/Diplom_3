@@ -2,8 +2,8 @@ import pytest
 import allure
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
-from pages.feed_page import FeedPage
-from pages.modal_window_page import ModalWindowPage
+from pages.order_feed_page import OrderFeedPage
+from pages.modal_ingredient_page import ModalWindowPage
 from pages.modal_order_page import ModalOrderPage
 from utils.config import FEED_PAGE_URL, MAIN_PAGE_URL
 
@@ -27,7 +27,7 @@ class TestCoreFeatures:
                 main_page = MainPage(driver)
                 main_page.go_to_feed()
                 assert driver.current_url == FEED_PAGE_URL, "Не удалось перейти на страницу 'Лента заказов'"
-                feed_page = FeedPage(driver)
+                feed_page = OrderFeedPage(driver)
                 assert feed_page.is_feed_title_visible(), "Заголовок 'Лента заказов' отсутствует"
 
             with allure.step("Переход на 'Конструктор'"):

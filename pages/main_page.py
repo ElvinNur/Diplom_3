@@ -5,6 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from utils.config import MAIN_PAGE_URL
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -19,6 +20,10 @@ class MainPage(BasePage):
     def go_to_feed(self):
         """Переход на 'Лента заказов'."""
         self.js_click(self.locators.FEED_BUTTON)
+        
+    def go_to_main(self):
+        """Переход на главную."""
+        self.js_click(self.locators.STELLAR_BURGERS)
 
     def go_to_constructor(self):
         """Переход на 'Конструктор'."""
@@ -67,3 +72,42 @@ class MainPage(BasePage):
             source.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer }));
         """
         self.driver.execute_script(js_code, ingredient, cart)
+        
+    def place_order(self):
+        """
+        Добавляет три ингредиента в корзину и оформляет заказ.
+        """
+        
+        def drag_and_drop(ingredient_locator, cart_locator):
+            """Перетаскивает ингредиент в корзину через JavaScript."""
+            ingredient = self.driver.find_element(*ingredient_locator)
+            cart = self.driver.find_element(*cart_locator)
+
+            js_code = """
+                const source = arguments[0];
+                const target = arguments[1];
+                const dataTransfer = new DataTransfer();
+                
+                source.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer }));
+                target.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer }));
+                source.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer }));
+            """
+            self.driver.execute_script(js_code, ingredient, cart)
+
+        # Перетаскиваем первый ингредиент (булку)
+        drag_and_drop(self.locators.FIRST_INGREDIENT, self.locators.CART)
+
+        # Кликаем на вкладку "Соусы"
+        self.js_click(self.locators.SAUCES_BUTTON)
+
+        # Перетаскиваем второй ингредиент (соус)
+        drag_and_drop(self.locators.SECOND_INGREDIENT, self.locators.CART)
+
+        # Кликаем на вкладку "Начинки"
+        self.js_click(self.locators.FILLINGS_BUTTON)
+
+        # Перетаскиваем третий ингредиент (начинку)
+        drag_and_drop(self.locators.THIRD_INGREDIENT, self.locators.CART)
+
+        # Нажимаем "Оформить заказ"
+        self.js_click(self.locators.ORDER_BUTTON)

@@ -1,6 +1,21 @@
-__pycache__/
-venv/
-.idea/
+
 .pytest_cache/
+# Virtual environment
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Allure results (но НЕ отчеты!)
 allure-results/
-allure-report/
+
+# IDE файлы
+.idea/
+.vscode/
+*.iml
+
+# OS специфические файлы
+.DS_Store
+Thumbs.db

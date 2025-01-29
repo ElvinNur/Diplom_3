@@ -23,6 +23,19 @@ class AccountPage(BasePage):
         self.js_click(self.locators.ORDER_HISTORY_BUTTON)
         assert self.is_correct_url(ORDER_HISTORY_PAGE_URL), \
             "Не удалось загрузить страницу 'История заказов'"
+            
+    def get_last_order_number(self):
+        """
+        Получает номер последнего заказа из истории заказов.
+        :return: номер заказа в формате строки.
+        """
+        # Ожидаем появления последнего заказа в истории
+        last_order_element = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(self.locators.LAST_ORDER_IN_HISTORY),
+            "Последний заказ не найден в истории заказов"
+        )
+
+        return last_order_element.text
 
     def logout(self):
         """Выход из аккаунта."""

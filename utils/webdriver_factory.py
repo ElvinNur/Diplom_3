@@ -10,11 +10,13 @@ class WebDriverFactory:
         if browser_type == "chrome":
             options = ChromeOptions()
             options.add_argument("--start-maximized")
+            options.add_argument("--force-device-scale-factor=0.8")
             driver = webdriver.Chrome(options=options)
             return driver
         elif browser_type == "firefox":
             options = FirefoxOptions()
             options.add_argument("--start-maximized")
+            options.set_preference("layout.css.devPixelsPerPx", "0.8")
             driver = webdriver.Firefox(options=options)
             return driver
         else:
