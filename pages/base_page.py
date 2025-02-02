@@ -2,11 +2,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import TimeoutException
+
 
 class BasePage:
-    def __init__(self, driver):
+    def __init__(self, driver, timeout=10):
         self.driver = driver
-        self.timeout = 10
+        self.wait = WebDriverWait(self.driver, timeout)
+        
+    def open_url(self, url):
+        """Открывает указанный URL и ждет полной загрузки страницы."""
+        self.driver.get(url)
+
+    def find_element(self, locator):
+        """Ищет элемент и возвращает его."""
+        return self.driver.find_element(*locator)
 
     def get_current_url(self):
         """Возвращает текущий URL страницы."""
@@ -16,60 +26,76 @@ class BasePage:
         """Проверяет, что текущий URL совпадает с ожидаемым."""
         return self.get_current_url() == expected_url
 
-    def wait_and_click(self, locator, timeout=10):
+    def wait_and_click(self, locator):
         """Ожидание видимости элемента и клик по нему."""
-        WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator)).click()
+        element = self.wait.until(EC.element_to_be_clickable(locator))
+        element.click()
 
-    def enter_text(self, locator, text, timeout=10):
+    def enter_text(self, locator, text):
         """Ожидание элемента и ввод текста."""
-        element = WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
+        element = self.wait.until(EC.presence_of_element_located(locator))
         element.clear()
         element.send_keys(text)
-    
-    
-    def is_element_visible(self, locator, timeout=10):
+
+    def wait_for_url(self, expected_url):
+        """Ожидает, пока текущий URL страницы не станет ожидаемым."""
+        self.wait.until(EC.url_to_be(expected_url))
+
+    def wait_for_element_visibility(self, locator):
+        """Ожидает, пока элемент станет видимым."""
+        return self.wait.until(EC.visibility_of_element_located(locator))
+
+    def wait_for_element_invisibility(self, locator):
+        """Ожидает, пока элемент станет невидимым."""
+        self.wait.until(EC.invisibility_of_element_located(locator))
+
+    def is_element_visible(self, locator):
         """Проверяет, что элемент видим на странице."""
         try:
-            # Ожидание присутствия элемента в DOM
-            element = WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located(locator)
-            )
-            # Проверка, что элемент видим
+            element = self.wait.until(EC.presence_of_element_located(locator))
             return element.is_displayed()
         except:
-            # Если элемент не найден или невидим, возвращаем False
             return False
-        
-        
+
+    def wait_for_element_presence(self, locator):
+        """Ожидает, пока элемент появится в DOM."""
+        return self.wait.until(EC.presence_of_element_located(locator))
+
+
     def js_click(self, locator, use_fallback=True):
         """
         Выполняет клик на элемент с помощью Selenium или JavaScript.
 
-        :param locator: Локатор элемента (кортеж типа (By, "value")).
+        :param locator: Локатор элемента (кортеж (By, "value")).
         :param use_fallback: Если True, выполняет наведение мыши и JS-клик, если стандартный клик не сработал.
         """
         try:
-            # Ожидание, пока элемент станет кликабельным, и попытка стандартного клика
-            element = WebDriverWait(self.driver, 1).until(
-                EC.element_to_be_clickable(locator),
-                f"Элемент с локатором {locator} не кликабелен."
-            )
+            element = self.wait.until(EC.element_to_be_clickable(locator))
             element.click()
         except Exception as e:
             if use_fallback:
-                # Если стандартный клик не удался, выполняем наведение мыши и клик через JS
-                element = WebDriverWait(self.driver, 1).until(
-                    EC.presence_of_element_located(locator),
-                    f"Элемент с локатором {locator} не найден."
-                )
+                element = self.wait.until(EC.presence_of_element_located(locator))
                 actions = ActionChains(self.driver)
                 actions.move_to_element(element).perform()
-
-                # Попытка клика через JavaScript после наведения
                 self.driver.execute_script(
                     "if (arguments[0].click) { arguments[0].click(); } else { arguments[0].dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })); }",
                     element
                 )
             else:
                 raise
-        
+
+    def wait_for_element_text_to_be(self, locator, expected_text, timeout=10):
+        """
+        Ожидает, пока текст элемента станет равным ожидаемому.
+
+        :param locator: Локатор элемента (By, "value").
+        :param expected_text: Ожидаемый текст элемента.
+        :param timeout: Время ожидания в секундах.
+        :return: True, если текст стал ожидаемым, иначе False.
+        """
+        try:
+            return WebDriverWait(self.driver, timeout).until(
+                lambda d: d.find_element(*locator).text.strip() == expected_text
+            )
+        except TimeoutException:
+            return False

@@ -10,12 +10,12 @@ class LoginPage(BasePage):
 
     def open(self):
         """Переходим на страницу логина."""
-        self.driver.get(LOGIN_PAGE_URL)
+        self.open_url(LOGIN_PAGE_URL)
     
     def click_forgot_password_link(self):
         """Кликаем на ссылку 'Восстановить пароль'."""
         self.js_click(self.locators.FORGOT_PASSWORD_LINK)
-        return ForgotPasswordPage(self.driver)
+        
     
     def login(self, email, password):
         """Авторизация с использованием email и пароля."""

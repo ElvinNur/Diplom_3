@@ -12,10 +12,9 @@ class ModalWindowPage(BasePage):
     def is_modal_visible(self):
         """Проверяет, что модальное окно отображается."""
         try:
-            WebDriverWait(self.driver, 1).until(
-                EC.visibility_of_element_located(self.locators.MODAL_OPEN)
-            )
+            self.wait_for_element_visibility(self.locators.MODAL_OPEN)
             return True  # Модальное окно видно
+        
         except TimeoutException:
             return False  # Модальное окно не видно
 

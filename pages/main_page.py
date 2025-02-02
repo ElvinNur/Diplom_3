@@ -15,7 +15,6 @@ class MainPage(BasePage):
     def go_to_account(self):
         """Переход в личный кабинет."""
         self.js_click(self.locators.ACCOUNT_BUTTON)
-        return AccountPage(self.driver)
     
     def go_to_feed(self):
         """Переход на 'Лента заказов'."""
@@ -28,6 +27,10 @@ class MainPage(BasePage):
     def go_to_constructor(self):
         """Переход на 'Конструктор'."""
         self.js_click(self.locators.CONSTRUCTOR_BUTTON)
+        
+    def button_order_is_visible(self):
+        """Проверяет наличие заголовка 'Соберите бургер'."""
+        return self.is_element_visible(self.locators.ORDER_BUTTON)
 
     def is_constructor_title_visible(self):
         """Проверяет наличие заголовка 'Соберите бургер'."""
@@ -44,10 +47,9 @@ class MainPage(BasePage):
     def is_counter_change(self):
         """Проверяет, что каунтер изменился."""
         try:
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(self.locators.COUNTER)
-            )
+            self.is_element_visible(self.locators.COUNTER)
             return True  # Каунтер сменился на 2
+        
         except TimeoutException:
             return False  # Каунтер не изменился 
         
@@ -56,10 +58,10 @@ class MainPage(BasePage):
         Перетаскивает ингредиент в корзину с использованием JavaScript.
         """
         # Находим элемент ингредиента
-        ingredient = self.driver.find_element(*self.locators.FIRST_INGREDIENT)
+        ingredient = self.find_element(self.locators.FIRST_INGREDIENT)
 
         # Находим элемент корзины
-        cart = self.driver.find_element(*self.locators.CART)
+        cart = self.find_element(self.locators.CART)
 
         # Выполняем перетаскивание через JavaScript
         js_code = """
@@ -80,8 +82,8 @@ class MainPage(BasePage):
         
         def drag_and_drop(ingredient_locator, cart_locator):
             """Перетаскивает ингредиент в корзину через JavaScript."""
-            ingredient = self.driver.find_element(*ingredient_locator)
-            cart = self.driver.find_element(*cart_locator)
+            ingredient = self.find_element(ingredient_locator)
+            cart = self.find_element(cart_locator)
 
             js_code = """
                 const source = arguments[0];

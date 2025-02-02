@@ -12,7 +12,7 @@ class ResetPasswordPage(BasePage):
 
     def verify_password_field_active(self):
         """Проверяем, что поле пароля становится активным."""
-        password_label = self.driver.find_element(*self.locators.PASSWORD_LABEL)
+        password_label = self.find_element(self.locators.PASSWORD_LABEL)
         assert "input__placeholder-focused" in password_label.get_attribute("class"), \
             "Поле пароля не стало активным!"
 
