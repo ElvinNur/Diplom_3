@@ -1,9 +1,5 @@
 from .base_page import BasePage
 from locators.main_page_locators import MainPageLocators
-from .account_page import AccountPage
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from utils.config import MAIN_PAGE_URL
 
@@ -54,47 +50,19 @@ class MainPage(BasePage):
             return False  # Каунтер не изменился 
         
     def drag_ingredient_to_cart(self):    
-        """
-        Перетаскивает ингредиент в корзину с использованием JavaScript.
-        """
-        # Находим элемент ингредиента
+        """Перетаскивает ингредиент в корзину с использованием JavaScript."""
         ingredient = self.find_element(self.locators.FIRST_INGREDIENT)
-
-        # Находим элемент корзины
         cart = self.find_element(self.locators.CART)
-
-        # Выполняем перетаскивание через JavaScript
-        js_code = """
-            const source = arguments[0];
-            const target = arguments[1];
-            const dataTransfer = new DataTransfer();
-            
-            source.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer }));
-            target.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer }));
-            source.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer }));
-        """
-        self.driver.execute_script(js_code, ingredient, cart)
+        self.drag_and_drop_js(ingredient, cart)
         
     def place_order(self):
-        """
-        Добавляет три ингредиента в корзину и оформляет заказ.
-        """
+        """Добавляет три ингредиента в корзину и оформляет заказ."""
         
         def drag_and_drop(ingredient_locator, cart_locator):
             """Перетаскивает ингредиент в корзину через JavaScript."""
             ingredient = self.find_element(ingredient_locator)
             cart = self.find_element(cart_locator)
-
-            js_code = """
-                const source = arguments[0];
-                const target = arguments[1];
-                const dataTransfer = new DataTransfer();
-                
-                source.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer }));
-                target.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer }));
-                source.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer }));
-            """
-            self.driver.execute_script(js_code, ingredient, cart)
+            self.drag_and_drop_js(ingredient, cart)
 
         # Перетаскиваем первый ингредиент (булку)
         drag_and_drop(self.locators.FIRST_INGREDIENT, self.locators.CART)

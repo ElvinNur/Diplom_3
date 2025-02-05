@@ -25,7 +25,6 @@ def created_user(user_api):
     user_data["email"] = f"test_{uuid.uuid4().hex}@example.com"  # Генерируем уникальный email
 
     user_response = user_api.create_user(user_data)
-    assert "accessToken" in user_response, "Пользователь не был создан"
 
     access_token = user_response["accessToken"]
 

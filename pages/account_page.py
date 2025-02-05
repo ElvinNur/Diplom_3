@@ -1,7 +1,5 @@
 from .base_page import BasePage
 from locators.account_page_locators import AccountPageLocators
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from utils.config import LOGIN_PAGE_URL, PROFILE_PAGE_URL, ORDER_HISTORY_PAGE_URL
 
  

@@ -1,8 +1,7 @@
 from .base_page import BasePage
 from locators.feed_page_locators import FeedPageLocators
 from utils.config import FEED_PAGE_URL
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 
 
 class OrderFeedPage(BasePage):

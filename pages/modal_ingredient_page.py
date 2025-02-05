@@ -1,7 +1,5 @@
 from .base_page import BasePage
 from locators.modal_window_locators import ModalWindowLocators
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
 class ModalWindowPage(BasePage):

@@ -1,6 +1,5 @@
 from .base_page import BasePage
 from locators.login_page_locators import LoginPageLocators
-from .forgot_password_page import ForgotPasswordPage
 from utils.config import LOGIN_PAGE_URL
 
 class LoginPage(BasePage):

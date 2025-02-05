@@ -99,3 +99,20 @@ class BasePage:
             )
         except TimeoutException:
             return False
+        
+    def execute_js(self, script, *args):
+        """Выполняет JavaScript код на странице."""
+        return self.driver.execute_script(script, *args)
+
+    def drag_and_drop_js(self, source_element, target_element):
+        """Перетаскивает элемент с помощью JavaScript."""
+        js_code = """
+            const source = arguments[0];
+            const target = arguments[1];
+            const dataTransfer = new DataTransfer();
+            
+            source.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer }));
+            target.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer }));
+            source.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer }));
+        """
+        self.execute_js(js_code, source_element, target_element)
