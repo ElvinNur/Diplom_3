@@ -1,0 +1,7 @@
+selenium
+pytest
+allure-pytest
+webdriver-manager
+requests
+
+# pip install -r requirements.txt
